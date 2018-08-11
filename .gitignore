@@ -1,0 +1,15 @@
+node_modules/
+npm-debug.log*
+trash/
+dist/
+src/db/db.json
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+.DS_store

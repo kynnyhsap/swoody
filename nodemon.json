@@ -1,0 +1,10 @@
+{
+    "ignore": ["**/*.test.ts", "**/*.spec.ts", ".git", "node_modules", "src/db/db.json"],
+    "watch": ["src"],
+    "exec": "npm start",
+    "ext": "ts, json",
+    "env": {
+        "NODE_ENV": "development",
+        "DB_URI": "mongodb://localhost:27017/events_db"
+    }
+}
