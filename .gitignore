@@ -13,3 +13,5 @@ src/db/db.json
 *.sln
 
 .DS_store
+
+.env
