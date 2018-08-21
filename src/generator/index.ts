@@ -1,33 +1,56 @@
+import * as notevil from 'notevil'
+import * as methods from './methods'
 import { getRepeatTimes, MUSTASCHE_REGEX } from './utils'
-import { methods } from './methods'
 
-// todo: test and handle arrays
-export function handleField(value: any) {
-    if (typeof value === 'string') {
-        if (value.match(MUSTASCHE_REGEX)) {
-            return value.replace(MUSTASCHE_REGEX, (matched: string, expresion: string) => {
-                return methods.run(expresion)
-            })
+export function runMethods(method: string, context: any) {
+    try {
+        return notevil.eval(`${method}`, context)
+    } catch (error) {
+        return `<${error}>`
+    }
+}
+
+export function handleField(field: any): any {
+    if (typeof field === 'string') {
+        if (field.match(MUSTASCHE_REGEX)) {
+            const leftChars = field.replace(MUSTASCHE_REGEX, '')
+            const insideString = leftChars.length > 0
+
+            if (insideString) {
+                const replacer = (_: string, code: string) => runMethods(code, methods)
+                return field.replace(MUSTASCHE_REGEX, replacer)
+            } else {
+                let result
+
+                field.replace(MUSTASCHE_REGEX, (_: string, code: string) => {
+                    result = runMethods(code, methods)
+                    return ''
+                })
+
+                return result
+            }
         } else {
-            return value
+            return field
         }
-    } else if (typeof value === 'function') {
-        return value(methods)
-    } else if (typeof value === 'object' && value !== null) {
-        if (value.repeat !== undefined && value.object !== undefined) {
-            if (value.object !== 'object') {
+    } else if (typeof field === 'function') {
+        const result = field(methods)
+
+        return result ? result : null
+    } else if (typeof field === 'object' && field !== null) {
+        if (field.repeat !== undefined && field.object !== undefined) {
+            if (field.object !== 'object') {
                 const resultedArray = []
-                for (let i = 0; i < getRepeatTimes(value.repeat); i++) {
-                    resultedArray.push(handleField(value.object))
+                for (let i = 0; i < getRepeatTimes(field.repeat); i++) {
+                    resultedArray.push(handleField(field.object))
                 }
                 return resultedArray
             } else {
                 const resultedArray = []
-                for (let i = 0; i < getRepeatTimes(value.repeat); i++) {
+                for (let i = 0; i < getRepeatTimes(field.repeat); i++) {
                     // extract
                     const resultedObject = {}
-                    for (const key in value.object) {
-                        resultedObject[key] = handleField(value.object[key])
+                    for (const key in field.object) {
+                        resultedObject[key] = handleField(field.object[key])
                     }
                     // extract
 
@@ -36,19 +59,29 @@ export function handleField(value: any) {
                 return resultedArray
             }
         } else {
-            if (Array.isArray(value)) {
-                return value.map(elem => handleField(elem))
+            if (Array.isArray(field)) {
+                return field.map(elem => handleField(elem))
             } else {
                 // extract
                 const result = {}
-                for (const key in value) {
-                    result[key] = handleField(value[key])
+                for (const key in field) {
+                    result[key] = handleField(field[key])
                 }
                 return result
                 // extract
             }
         }
+    } else if (typeof field === 'number') {
+        if (Number.isNaN(field) || !Number.isFinite(field)) {
+            return null
+        } else {
+            return field
+        }
     } else {
-        return value
+        return field
     }
+}
+
+export function generate(schema: any) {
+    return JSON.stringify(handleField(schema))
 }
