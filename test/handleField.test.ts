@@ -57,7 +57,6 @@ describe('handleField function', () => {
 
     describe('object', () => {
         it('sould return array of values', () => {
-            // check when repeat equals to 0 or less
             const field = '{{same("l")}}'
 
             expect(
@@ -71,6 +70,11 @@ describe('handleField function', () => {
                 expect(handleField({ repeat: [3, 10], object: field }).length).toBeGreaterThanOrEqual(3)
                 expect(handleField({ repeat: [3, 10], object: field }).length).toBeLessThanOrEqual(10)
             }
+        })
+
+        it('sould return empty array', () => {
+            expect(handleField({ repeat: 0, object: {} })).toEqual([])
+            expect(handleField({ repeat: -1, object: {} })).toEqual([])
         })
 
         it('sould return evaluated object', () => {
@@ -96,7 +100,13 @@ describe('handleField function', () => {
         })
     })
 
-    describe('array', () => {})
+    describe('array', () => {
+        it('sould return array of evaluated values', () => {
+            const arr = [1, '{{same("30")}}', 4, 234]
+
+            expect(handleField(arr)).toEqual([1, '30', 4, 234])
+        })
+    })
 
     describe('null', () => {
         it('should return null', () => {
