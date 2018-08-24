@@ -1,10 +1,10 @@
 import * as notevil from 'notevil'
-import * as methods from './methods'
+import * as context from './context'
 import { getRepeatTimes, MUSTASCHE_REGEX } from './utils'
 
-export function runMethods(method: string, context: any) {
+export function runMethods(method: string, ctx: any) {
     try {
-        return notevil.eval(`${method}`, context)
+        return notevil.eval(`${method}`, ctx)
     } catch (error) {
         return `<${error}>`
     }
@@ -17,13 +17,13 @@ export function handleField(field: any): any {
             const insideString = leftChars.length > 0
 
             if (insideString) {
-                const replacer = (_: string, code: string) => runMethods(code, methods)
+                const replacer = (_: string, code: string) => runMethods(code, context)
                 return field.replace(MUSTASCHE_REGEX, replacer)
             } else {
                 let result
 
                 field.replace(MUSTASCHE_REGEX, (_: string, code: string) => {
-                    result = runMethods(code, methods)
+                    result = runMethods(code, context)
                     return ''
                 })
 
@@ -33,7 +33,7 @@ export function handleField(field: any): any {
             return field
         }
     } else if (typeof field === 'function') {
-        const result = field(methods)
+        const result = field(context)
 
         return result ? result : null
     } else if (typeof field === 'object' && field !== null) {
