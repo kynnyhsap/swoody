@@ -5,6 +5,7 @@
   "license": "MIT",
   "author": "Andrew Pashinnik <tobirawork@gmail.com>",
   "repository": "https://github.com/kwoosh/swoody",
+  "main": "lib/index.js",
   "typings": "swoody.d.ts",
   "files": [
     "src",
