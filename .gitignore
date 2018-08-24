@@ -2,7 +2,7 @@ node_modules/
 npm-debug.log*
 trash/
 dist/
-src/db/db.json
+lib/
 
 # Editor directories and files
 .idea

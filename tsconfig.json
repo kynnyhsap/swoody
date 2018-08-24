@@ -4,8 +4,8 @@
         "module": "commonjs",
         "target": "es2017",
         "noImplicitAny": false,
-        "outDir": "./dist",
-        "sourceMap": true,
+        "outDir": "./lib",
+        "sourceMap": false,
         "resolveJsonModule": true
     }
 }
