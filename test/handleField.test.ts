@@ -25,29 +25,29 @@ describe('handleField function', () => {
 
         it('should return evaluated string', () => {
             expect(handleField('{{"kek".toUpperCase()}}')).toBe('KEK')
-            expect(handleField('lol {{same(10)}}')).toBe('lol 10')
+            expect(handleField('lol {{sameValue(10)}} _ {{sameValue(3)}}')).toBe('lol 10 _ 3')
         })
 
         it('should return evaluated value', () => {
-            expect(handleField('{{same(10)}}')).toBe(10)
+            expect(handleField('{{sameValue(10)}}')).toBe(10)
             expect(handleField('{{10 * 5}}')).toBe(50)
-            expect(handleField('{{same(null)}}')).toBe(null)
+            expect(handleField('{{sameValue(null)}}')).toBe(null)
         })
     })
 
     describe('function', () => {
         it('should call function and return value', () => {
-            const fun = (tags: any) => {
+            const fun = (context: any) => {
                 const str = 'l' + 'o' + 'l'
 
-                return tags.same(str).toUpperCase()
+                return context.sameValue(str).toUpperCase()
             }
 
             expect(handleField(fun)).toBe('LOL')
         })
 
         it('should call function and return null', () => {
-            const fun = (tags: any) => {
+            const fun = (context: any) => {
                 1 + 1
             }
 
@@ -57,7 +57,7 @@ describe('handleField function', () => {
 
     describe('object', () => {
         it('sould return array of values', () => {
-            const field = '{{same("l")}}'
+            const field = '{{sameValue("l")}}'
 
             expect(
                 handleField({
@@ -82,8 +82,8 @@ describe('handleField function', () => {
                 age: 12,
                 kek: '{{3+10}}',
                 name: {
-                    first: '{{same("Bob")}}',
-                    last: '{{same("Marley")}}',
+                    first: '{{sameValue("Bob")}}',
+                    last: '{{sameValue("Marley")}}',
                 },
             }
 
@@ -102,7 +102,7 @@ describe('handleField function', () => {
 
     describe('array', () => {
         it('sould return array of evaluated values', () => {
-            const arr = [1, '{{same("30")}}', 4, 234]
+            const arr = [1, '{{sameValue("30")}}', 4, 234]
 
             expect(handleField(arr)).toEqual([1, '30', 4, 234])
         })
