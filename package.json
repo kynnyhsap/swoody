@@ -1,7 +1,7 @@
 {
   "name": "swoody",
   "version": "0.0.1",
-  "description": "Swoody is a powerfull JSON Generator",
+  "description": "Powerfull JSON Generator",
   "license": "MIT",
   "author": "Andrew Pashinnik <tobirawork@gmail.com>",
   "repository": "https://github.com/kwoosh/swoody",
@@ -15,12 +15,11 @@
   ],
   "scripts": {
     "dev": "nodemon",
-    "start": "ts-node ./src/app.ts",
+    "start": "ts-node ./examples/app.ts",
     "test": "jest",
     "build": "tsc"
   },
   "dependencies": {
-    "aguid": "^2.0.0",
     "faker": "^4.1.0",
     "moment": "^2.22.2",
     "notevil": "^1.1.0"
