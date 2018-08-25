@@ -14,10 +14,11 @@ export function handleField(field: any): any {
     if (typeof field === 'string') {
         if (field.match(MUSTASCHE_REGEX)) {
             const leftChars = field.replace(MUSTASCHE_REGEX, '')
-            const insideString = leftChars.length > 0
+            const insideStringTemplate = leftChars.length > 0
 
-            if (insideString) {
+            if (insideStringTemplate) {
                 const replacer = (_: string, code: string) => runMethods(code, context)
+
                 return field.replace(MUSTASCHE_REGEX, replacer)
             } else {
                 let result
