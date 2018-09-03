@@ -1,85 +1,18 @@
-import * as notevil from 'notevil'
-import * as context from './context'
-import { getRepeatTimes, MUSTASCHE_REGEX } from './utils'
-
-export function evaluate(code: string, ctx: any) {
-    try {
-        return notevil.eval(`${code}`, ctx)
-    } catch (error) {
-        return `<${error}>`
-    }
-}
+import { defineFieldType } from './utils'
+import * as handlers from './handlers'
 
 export function handleField(field: any) {
-    if (typeof field === 'string') {
-        if (field.match(MUSTASCHE_REGEX)) {
-            const leftChars = field.replace(MUSTASCHE_REGEX, '')
-            const insideStringTemplate = leftChars.length > 0
-
-            if (insideStringTemplate) {
-                const replacer = (_: string, code: string) => evaluate(code, context)
-
-                return field.replace(MUSTASCHE_REGEX, replacer)
-            } else {
-                let result
-
-                field.replace(MUSTASCHE_REGEX, (_: string, code: string) => {
-                    result = evaluate(code, context)
-                    return ''
-                })
-
-                return result
-            }
-        } else {
+    switch (defineFieldType(field)) {
+        case 'string':
+            return handlers.handleString(field)
+        case 'number':
+            return handlers.handleNumber(field)
+        case 'function':
+            return handlers.handleFunction(field)
+        case 'object':
+            return handlers.handleObject(field, handleField)
+        default:
             return field
-        }
-    } else if (typeof field === 'function') {
-        const result = field(context)
-
-        return result ? result : null
-    } else if (typeof field === 'object' && field !== null) {
-        if (field.repeat !== undefined && field.object !== undefined) {
-            if (field.object !== 'object') {
-                const resultedArray = []
-                for (let i = 0; i < getRepeatTimes(field.repeat); i++) {
-                    resultedArray.push(handleField(field.object))
-                }
-                return resultedArray
-            } else {
-                const resultedArray = []
-                for (let i = 0; i < getRepeatTimes(field.repeat); i++) {
-                    // extract
-                    const resultedObject = {}
-                    for (const key in field.object) {
-                        resultedObject[key] = handleField(field.object[key])
-                    }
-                    // extract
-
-                    resultedArray.push(resultedObject)
-                }
-                return resultedArray
-            }
-        } else {
-            if (Array.isArray(field)) {
-                return field.map(elem => handleField(elem))
-            } else {
-                // extract
-                const result = {}
-                for (const key in field) {
-                    result[key] = handleField(field[key])
-                }
-                return result
-                // extract
-            }
-        }
-    } else if (typeof field === 'number') {
-        if (Number.isNaN(field) || !Number.isFinite(field)) {
-            return null
-        } else {
-            return field
-        }
-    } else {
-        return field
     }
 }
 
