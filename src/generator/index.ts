@@ -2,29 +2,29 @@ import * as notevil from 'notevil'
 import * as context from './context'
 import { getRepeatTimes, MUSTASCHE_REGEX } from './utils'
 
-export function runMethods(method: string, ctx: any) {
+export function evaluate(code: string, ctx: any) {
     try {
-        return notevil.eval(`${method}`, ctx)
+        return notevil.eval(`${code}`, ctx)
     } catch (error) {
         return `<${error}>`
     }
 }
 
-export function handleField(field: any): any {
+export function handleField(field: any) {
     if (typeof field === 'string') {
         if (field.match(MUSTASCHE_REGEX)) {
             const leftChars = field.replace(MUSTASCHE_REGEX, '')
             const insideStringTemplate = leftChars.length > 0
 
             if (insideStringTemplate) {
-                const replacer = (_: string, code: string) => runMethods(code, context)
+                const replacer = (_: string, code: string) => evaluate(code, context)
 
                 return field.replace(MUSTASCHE_REGEX, replacer)
             } else {
                 let result
 
                 field.replace(MUSTASCHE_REGEX, (_: string, code: string) => {
-                    result = runMethods(code, context)
+                    result = evaluate(code, context)
                     return ''
                 })
 
