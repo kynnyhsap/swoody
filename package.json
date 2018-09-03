@@ -7,6 +7,13 @@
   "repository": "https://github.com/kwoosh/swoody",
   "main": "lib/index.js",
   "typings": "swoody.d.ts",
+  "keywords": [
+    "json",
+    "data",
+    "generator",
+    "random",
+    "fake"
+  ],
   "files": [
     "src",
     "lib",
