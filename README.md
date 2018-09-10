@@ -1,7 +1,5 @@
 # [Swoody](https://github.com/tobira-shoe/swoody) &middot; [![npm version](https://img.shields.io/npm/v/swoody.svg?style=flat)](https://www.npmjs.com/package/swoody)
 
-<!-- [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/facebook/react/blob/master/LICENSE) -->
-
 Powerfull JSON Generator
 
 -   [Complete documentation](#documentation)
