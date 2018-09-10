@@ -1,38 +1,64 @@
-# Swoody
+# [Swoody](https://github.com/tobira-shoe/swoody) &middot; [![npm version](https://img.shields.io/npm/v/swoody.svg?style=flat)](https://www.npmjs.com/package/swoody)
 
-## Contibution
+<!-- [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/facebook/react/blob/master/LICENSE) -->
 
-NPM Scripts:
+Powerfull JSON Generator
 
--   `dev` : Starting server for development
--   `test` : Run all tests
+-   [Complete documentation](#documentation)
+-   [Example of schema](#example-of-schema)
+-   [Table of contents](#table-of-contents)
 
-### Commit Messages
+## Example of `schema`
 
-Commit messages should follow the Semantic Commit Messages format:
+Try out the following code and realise the power of Swoody 😎
 
+```js
+import { generate } from 'swoody'
+
+const schema = {
+    repeat: 7,
+    object: {
+        id: '{{ faker.random.uuid() }}',
+        isOnline: '{{ faker.random.boolean() }}',
+        description: '{{ faker.lorem.paragraphs(2) }}',
+        date: '{{ moment() }}',
+        organizators: {
+            repeat: [1, 5],
+            object: {
+                name: '{{ faker.name.firstName() }} {{ faker.name.lastName() }}',
+                job: '{{ faker.name.jobTitle() }}',
+                email: '{{ faker.internet.email() }}',
+                ava: '{{ faker.internet.avatar() }}',
+                age: '{{ 10 + 8 }}',
+            },
+        },
+        place({ faker }) {
+            return faker.random.arrayElement(['New-York', 'Moscow', 'Tokyo'])
+        },
+        title({ faker }) {
+            const randomWordsCount = faker.random.number({ min: 3, max: 12 })
+
+            return faker.lorem.words(countWords)
+        },
+        price({ faker }) {
+            const randomNumber = faker.random.number({ min: 100, max: 3000 })
+            const roundedPrice = Math.round(randomNumber / 100) * 100
+            const currencySymbol = faker.finance.currencySymbol()
+
+            return `${currencySymbol} ${roundedPrice}`
+        },
+    },
+}
+
+const json = generate(schema) // random generated json data
+
+console.log(json)
 ```
-label(namespace): title
 
-description
-```
+## Documentation
 
-1.  _label_ is one of the following:
-    -   `🐞 bug` - bug fixes.
-    -   `⚡️ feature` - new features.
-    -   `🔍 test` - changes to tests infrastructure.
-    -   `♻️ refactoring` - code refactoring, styling, formatting etc.
-    -   `😒 chore` - just chores.
-    -   `📝 docs` - changes to docs.
-    -   `🔖 v0.0.0` - version tag.
-2.  _namespace_ is put in parenthesis after label and is optional.
-3.  _title_ is a brief summary of changes.
-4.  _description_ is **optional**, new-line separated from title and is in present tense.
+Soon...
 
-Example:
+## Table of contents
 
-```
-fix(Page): fix page.pizza method
-
-This patch fixes page.pizza so that it works with iframes. Fixes #123, Fixes #234
-```
+Soon...
