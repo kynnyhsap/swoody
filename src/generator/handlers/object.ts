@@ -12,8 +12,6 @@ export function getRepeatTimes(times: number | number[]): number {
 
 export function handleObject(field, handleField) {
     if (field.repeat !== undefined && field.object !== undefined) {
-        console.log(field)
-
         if (field.object !== 'object') {
             const resultedArray = []
             for (let i = 0; i < getRepeatTimes(field.repeat); i++) {
