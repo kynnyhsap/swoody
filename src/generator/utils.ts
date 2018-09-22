@@ -13,6 +13,8 @@ export function defineFieldType(field: any) {
     if (typeof field === 'string') return 'string'
     if (typeof field === 'function') return 'function'
     if (typeof field === 'object' && field !== null) return 'object'
+
+    return null
 }
 
 export function getRandomInRange(min: number, max: number) {
