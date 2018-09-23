@@ -4,7 +4,7 @@ Powerfull JSON Generator
 
 - [Complete documentation](#documentation)
 - [Quick example](#quick-example)
-- [Table of contents](#table-of-contents)
+  <!-- - [Table of contents](#table-of-contents) -->
 
 ## Quick Example
 
@@ -47,48 +47,39 @@ console.log(json)
 - [Generating arrays](#arrays)
 - [Generating static values](#static-values)
 - [Special schema values](#special-schema-values)
-- [Context](#context)
+- [Build in Context](#build-in-context)
+- [Custom Context](#custom-context)
 
-### arrays
+### Arrays
 
 `object` field is using for defining value of element of array
 
 `repeat` field is using for defining _exact_ or _ramdom in range_ length of array:
 
+This will generate array of exact length
+
 ```js
-{
+const schema = {
   repeat: 7, // exact length
-}
-// or
-{
-  repeat: [2, 8] // ramdom in range from 2 to 8
-}
-```
-
-Will generate array of exact length
-
-```js
-const schema = {
-  repeat: 7,
   object: '{{ faker.random.number() }}',
 }
 ```
 
-Will generate array of random length in range from 1 to 5
+This will generate array of random length in range from 1 to 5
 
 ```js
 const schema = {
-  repeat: [1, 5],
+  repeat: [2, 8], // ramdom in range from 2 to 8
   object: '{{ faker.random.number() }}',
 }
 ```
 
-### static values
+### Static values
 
-To get a static values just pass whtire them as they are:
+To get a static values just pass them and left alone (-\_-):
 
 ```js
-{
+const schema =  {
   str: 'some string',
   num: 1923,
   nil: null,
@@ -104,10 +95,11 @@ To get a static values just pass whtire them as they are:
 
 And exceptions...
 
-All the following propeties below will be evaluated to `null`
+All the following values below will be evaluated to `null`
 
 ```js
-{
+const schema = {
+  prop0: null,
   prop1: undefined,
   prop2: NaN,
   prop3: Infinity,
@@ -117,29 +109,27 @@ All the following propeties below will be evaluated to `null`
 }
 ```
 
-Soon...
-
-### special `schema` values
+### Special `schema` values
 
 #### evaluating function props
 
-This function property will be evaluated to returned value:
+This function value will be evaluated to returned value from `return` statement:
 
 ```js
-{
+const schema = {
   funcProp(context) {
     return 20 % faker.random.number()
-  }
+  },
 }
 ```
 
 And function which return nothing will be evaluated to `null`:
 
 ```js
-{
+const schema = {
   funcProp(context) {
     console.log(context)
-  }
+  },
 }
 ```
 
@@ -150,7 +140,7 @@ Any expresion inside mustaches `{{ }}` will be evaluated and returned in field.
 This will evaluate expression inside mustache:
 
 ```js
-{
+const schema = {
   num: '{{ faker.random.number() }}',
   string: 'number: {{ 2 + 4 }}',
 }
@@ -159,18 +149,50 @@ This will evaluate expression inside mustache:
 You also have a [`context`](#context) in [mustaches](#evaluating-string-and-mustaches-props) and [mustaches](#evaluating-function-props)
 
 ```js
-{
+const schema = {
   mustacheContext: '{{ faker.random.number() }}',
-  functionContext(context){
+  functionContext(context) {
     return context.faker.random.number()
   },
 }
 ```
 
-### context
+### Build in context
 
 Soon...
 
-## Table of contents
+### Custom Context
 
-Soon...
+You can pass your own `context` as a second argument in `generate` and `handleField`:
+
+```js
+import { generate, handleField } from 'swoody'
+
+const customContext = {
+  MATH_PI: 3.14159,
+  cities: ['New-York', 'Moscow', 'Tokyo'],
+  trimString(string) {
+    return string.trim()
+  },
+}
+
+const schema = {
+  repeat: 7,
+  object: {
+    radius: '{{ MATH_PI * 2 }}',
+    place(context) {
+      return context.faker.random.arrayElement(context.cities)
+    },
+    str(context) {
+      return context.trimString('   fdkasfj   ')
+    },
+  },
+}
+
+// pass customContext
+const jsObject = handleField(eventsSchema, customContext)
+const jsonData = generate(eventsSchema, customContext)
+
+console.log(jsObject)
+console.log(jsonData)
+```
