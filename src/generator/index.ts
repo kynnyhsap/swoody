@@ -1,7 +1,7 @@
 import { defineFieldType } from './utils'
 import * as handlers from './handlers'
 
-export function handleField(field: any, customContext: any) {
+export function handleField(field: any, customContext: any = {}) {
     switch (defineFieldType(field)) {
         case 'string':
             return handlers.handleString(field, customContext)

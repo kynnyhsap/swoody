@@ -37,7 +37,7 @@ describe('handleField function', () => {
 
         tests.forEach(tt => {
             it(tt.name, () => {
-                const received = handleField(tt.value, {})
+                const received = handleField(tt.value)
 
                 expect(received).toEqual(tt.expected)
             })
@@ -80,7 +80,7 @@ describe('handleField function', () => {
 
         tests.forEach(tt => {
             it(tt.name, () => {
-                const received = handleField(tt.value, {})
+                const received = handleField(tt.value)
 
                 expect(received).toEqual(tt.expected)
             })
@@ -109,7 +109,7 @@ describe('handleField function', () => {
 
         tests.forEach(tt => {
             it(tt.name, () => {
-                const received = handleField(tt.value, {})
+                const received = handleField(tt.value)
 
                 expect(received).toEqual(tt.expected)
             })
@@ -119,8 +119,8 @@ describe('handleField function', () => {
     describe('object', () => {
         it('should return array of values', () => {
             for (let i = 0; i < 10; i++) {
-                expect(handleField({ repeat: [3, 10], object: '{{sameValue("l")}}' }, {}).length).toBeGreaterThanOrEqual(3)
-                expect(handleField({ repeat: [3, 10], object: '{{sameValue("l")}}' }, {}).length).toBeLessThanOrEqual(10)
+                expect(handleField({ repeat: [3, 10], object: '{{sameValue("l")}}' }).length).toBeGreaterThanOrEqual(3)
+                expect(handleField({ repeat: [3, 10], object: '{{sameValue("l")}}' }).length).toBeLessThanOrEqual(10)
             }
         })
 
@@ -171,7 +171,7 @@ describe('handleField function', () => {
 
         tests.forEach(tt => {
             it(tt.name, () => {
-                const received = handleField(tt.value, {})
+                const received = handleField(tt.value)
 
                 expect(received).toEqual(tt.expected)
             })
@@ -199,7 +199,7 @@ describe('handleField function', () => {
 
         tests.forEach(tt => {
             it(tt.name, () => {
-                const received = handleField(tt.value, {})
+                const received = handleField(tt.value)
 
                 expect(received).toEqual(tt.expected)
             })
@@ -217,7 +217,7 @@ describe('handleField function', () => {
 
         tests.forEach(tt => {
             it(tt.name, () => {
-                const received = handleField(tt.value, {})
+                const received = handleField(tt.value)
 
                 expect(received).toEqual(tt.expected)
             })
@@ -235,7 +235,7 @@ describe('handleField function', () => {
 
         tests.forEach(tt => {
             it(tt.name, () => {
-                const received = handleField(tt.value, {})
+                const received = handleField(tt.value)
 
                 expect(received).toEqual(tt.expected)
             })
