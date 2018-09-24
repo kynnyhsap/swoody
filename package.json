@@ -21,8 +21,6 @@
     "swoody.d.ts"
   ],
   "scripts": {
-    "dev": "nodemon",
-    "start": "ts-node ./examples/app.ts",
     "test": "jest",
     "build": "tsc",
     "prepublish": "npm t && npm run build"
